@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       title: 'Note App',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.deepOrange,
         appBarTheme: const AppBarTheme(
           color: Colors.white,
           elevation: 0,

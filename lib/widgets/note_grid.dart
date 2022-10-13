@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:notes_app/model/note_item.dart';
+import 'package:notes_app/model/note_item_model.dart';
 
 class NoteGrid extends StatelessWidget {
   final List<NoteItem> notes;

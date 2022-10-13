@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:notes_app/model/note_item.dart';
+import 'package:notes_app/model/note_item_model.dart';
 import 'package:notes_app/repository/create_note_repository.dart';
 
 class AddNoteScreen extends StatefulWidget {
@@ -95,7 +95,6 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
       keyboardType: value,
       decoration: InputDecoration(
           filled: true,
-          labelText: hintTitle,
           enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12)),
           fillColor: Colors.white,

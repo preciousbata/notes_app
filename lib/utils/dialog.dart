@@ -1,35 +1,33 @@
 import 'package:flutter/material.dart';
 
-Future<bool> showConfrimation(BuildContext context,
-    {required String title,
-    required String content}) async {
-  bool shouldDismiss = false;
-  await showDialog(
+Future<bool?> showConfirmationDialog(BuildContext context, String action) {
+  return showDialog<bool>(
     context: context,
-    builder: (context) => AlertDialog(
-      title: Text(title),
-      content: Text(content),
-      actions: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context, 'cancel');
-                shouldDismiss = false;
-              },
-              child: const Text('CANCEL'),
-            ),
-            TextButton(
+    barrierDismissible: true,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Do you want to $action this note?'),
+        actions: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              TextButton(
+                child: const Text('Yes'),
                 onPressed: () {
-                  Navigator.pop(context, 'delete');
-                  shouldDismiss = true;
+                  Navigator.pop(context, true); // showDialog() returns true
                 },
-                child: const Text('DELETE'))
-          ],
-        )
-      ],
-    ),
+              ),
+              TextButton(
+                child: const Text('No'),
+                onPressed: () {
+                  Navigator.pop(context, false); // showDialog() returns false
+                },
+              ),
+            ],
+          )
+
+        ],
+      );
+    },
   );
-  return shouldDismiss;
 }

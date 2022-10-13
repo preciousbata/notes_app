@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../constant.dart';
 import '../widgets/custom_button.dart';
-import 'sign_in_screen.dart';
+import '../screens/sign_in_screen.dart';
 
 
 class SplashScreen extends StatelessWidget {
@@ -53,7 +53,7 @@ class _SplashBodyState extends State<SplashBody> {
               ),
             ),
             Expanded(
-              flex: 2,
+              flex: 1,
               child: Padding(
                 padding: const EdgeInsets.symmetric(
                     horizontal: 20),
@@ -67,13 +67,15 @@ class _SplashBodyState extends State<SplashBody> {
                             imageList.length, (index) => buildCustomDot(index))
                       ],
                     ),
-                    const Spacer(flex: 3,),
-                    DefaultButton(text: 'Continue',
-                      press: (){
-                        Navigator.pushNamed(context, SignIn.routeName);
-                      },
+                    const Spacer(flex: 2,),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 18.0),
+                      child: DefaultButton(text: 'Continue',
+                        press: (){
+                          Navigator.pushNamed(context, SignIn.routeName);
+                        },
+                      ),
                     ),
-                    const Spacer(),
                   ],
                 ),
               ),
@@ -112,7 +114,7 @@ class SplashContent extends StatelessWidget {
       children: [
         const Spacer(flex: 2),
         const Text(
-          'NOTEZZ',
+          'NOTEZ',
           style: TextStyle(
               fontSize: 30,
               fontWeight: FontWeight.bold,
@@ -121,10 +123,13 @@ class SplashContent extends StatelessWidget {
         const Spacer(
           flex: 2,
         ),
-        Image(
-          height: 345,
-          width: 465,
-          image: AssetImage(image),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 18.0),
+          child: Image(
+            height: 520,
+            width: 465,
+            image: AssetImage(image),
+          ),
         ),
       ],
     );

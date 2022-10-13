@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:notes_app/model/note_item.dart';
+import 'package:notes_app/model/note_item_model.dart';
 
 class CreateNote {
   Future createNotes(NoteItem note) async {

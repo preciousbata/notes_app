@@ -12,6 +12,7 @@ class AppSliverAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
+      automaticallyImplyLeading: false,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

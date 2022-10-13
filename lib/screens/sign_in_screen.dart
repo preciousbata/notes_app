@@ -13,14 +13,8 @@ class SignIn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Sign In',
-        ),
-        centerTitle: true,
-      ),
-      body: const SignInBody(),
+    return const Scaffold(
+      body: SignInBody(),
     );
   }
 }
@@ -79,7 +73,7 @@ class SignInBody extends StatelessWidget {
                       Text(
                         "Don't have an account?",
                         style: TextStyle(
-                          fontSize: 22,
+                          fontSize: 15,
                         ),
                       ),
                       SizedBox(
@@ -89,7 +83,8 @@ class SignInBody extends StatelessWidget {
                         'Sign Up',
                         style: TextStyle(
                           color: primaryColor,
-                          fontSize: 22,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ],
@@ -174,126 +169,130 @@ class _SignInFormState extends State<SignInForm> {
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      child: Column(
-        children: [
-          TextFormField(
-            keyboardType: TextInputType.emailAddress,
-            onSaved: (newEmail) => email = newEmail,
-            onChanged: (value) {
-              if (value.isNotEmpty && errors.contains(emailNull)) {
-                setState(() {
-                  errors.remove(emailNull);
-                });
-              } else if (emailValidator.hasMatch(value) &&
-                  errors.contains(invalidEmail)) {
-                setState(() {
-                  errors.remove(invalidEmail);
-                });
-              }
-              return;
-            },
-            validator: (value) {
-              if (value!.isEmpty && !errors.contains(emailNull)) {
-                setState(() {
-                  errors.add(emailNull);
-                });
-              } else if (!emailValidator.hasMatch(value) &&
-                  !errors.contains(invalidEmail)) {
-                setState(() {
-                  errors.add(invalidEmail);
-                });
-              }
-              return null;
-            },
-            decoration: const InputDecoration(
-                hintText: 'Enter your email',
-                labelText: 'Email',
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 18.0),
+        child: Column(
+          children: [
+            TextFormField(
+              keyboardType: TextInputType.emailAddress,
+              onSaved: (newEmail) => email = newEmail,
+              onChanged: (value) {
+                if (value.isNotEmpty && errors.contains(emailNull)) {
+                  setState(() {
+                    errors.remove(emailNull);
+                  });
+                } else if (emailValidator.hasMatch(value) &&
+                    errors.contains(invalidEmail)) {
+                  setState(() {
+                    errors.remove(invalidEmail);
+                  });
+                }
+                return;
+              },
+              validator: (value) {
+                if (value!.isEmpty && !errors.contains(emailNull)) {
+                  setState(() {
+                    errors.add(emailNull);
+                  });
+                } else if (!emailValidator.hasMatch(value) &&
+                    !errors.contains(invalidEmail)) {
+                  setState(() {
+                    errors.add(invalidEmail);
+                  });
+                }
+                return null;
+              },
+              decoration: const InputDecoration(
+                  hintText: 'Enter your email',
+                  labelText: 'Email',
+                  suffixIcon: Padding(
+                    padding: EdgeInsets.fromLTRB(0, 20, 20, 20),
+                    child: Icon(Icons.email_rounded),
+                  )),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            TextFormField(
+              onSaved: (newPassword) => password = newPassword,
+              onChanged: (value) {
+                if (value.isNotEmpty && errors.contains(passwordNull)) {
+                  setState(() {
+                    errors.remove(passwordNull);
+                  });
+                } else if (value.length >= 8 &&
+                    errors.contains(passwordTooShort)) {
+                  setState(() {
+                    errors.remove(passwordTooShort);
+                  });
+                }
+                return;
+              },
+              obscureText: true,
+              validator: (value) {
+                if (value!.isEmpty && !errors.contains(passwordNull)) {
+                  setState(() {
+                    errors.add(passwordNull);
+                  });
+                } else if (value.length < 8 &&
+                    !errors.contains(passwordTooShort)) {
+                  setState(() {
+                    errors.add(passwordTooShort);
+                  });
+                }
+                return null;
+              },
+              decoration: const InputDecoration(
+                hintText: 'Enter your password',
+                labelText: 'Password',
                 suffixIcon: Padding(
                   padding: EdgeInsets.fromLTRB(0, 20, 20, 20),
-                  child: Icon(Icons.email_rounded),
-                )),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          TextFormField(
-            onSaved: (newPassword) => password = newPassword,
-            onChanged: (value) {
-              if (value.isNotEmpty && errors.contains(passwordNull)) {
-                setState(() {
-                  errors.remove(passwordNull);
-                });
-              } else if (value.length >= 8 &&
-                  errors.contains(passwordTooShort)) {
-                setState(() {
-                  errors.remove(passwordTooShort);
-                });
-              }
-              return;
-            },
-            obscureText: true,
-            validator: (value) {
-              if (value!.isEmpty && !errors.contains(passwordNull)) {
-                setState(() {
-                  errors.add(passwordNull);
-                });
-              } else if (value.length < 8 &&
-                  !errors.contains(passwordTooShort)) {
-                setState(() {
-                  errors.add(passwordTooShort);
-                });
-              }
-              return null;
-            },
-            decoration: const InputDecoration(
-              hintText: 'Enter your password',
-              labelText: 'Password',
-              suffixIcon: Padding(
-                padding: EdgeInsets.fromLTRB(0, 20, 20, 20),
-                child: Icon(Icons.lock_rounded),
+                  child: Icon(Icons.lock_rounded),
+                ),
               ),
             ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          FormError(
-            errors: errors,
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Row(
-            children: [
-              Checkbox(
-                activeColor: primaryColor,
-                value: remember,
-                onChanged: (value) {
-                  setState(
-                        () {
-                      remember = value!;
-                    },
-                  );
-                },
-              ),
-              const Text('Remember me'),
-              const Spacer(),
-              GestureDetector(
-                onTap: (){},
-                child: const Text('Forgot Password',
-                    style: TextStyle(decoration: TextDecoration.underline)),
-              )
-            ],
-          ),
-          DefaultButton(
-              text: 'Continue',
-              press: () {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
-                  Navigator.pushNamed(context, HomeScreen.routeName);
-                }
-              })
-        ],
+            const SizedBox(
+              height: 10,
+            ),
+            FormError(
+              errors: errors,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              children: [
+                Checkbox(
+                  activeColor: primaryColor,
+                  value: remember,
+                  onChanged: (value) {
+                    setState(
+                          () {
+                        remember = value!;
+                      },
+                    );
+                  },
+                ),
+                const Text('Remember me'),
+                const Spacer(),
+                GestureDetector(
+                  onTap: (){},
+                  child: const Text('Forgot Password',
+                      style: TextStyle(decoration: TextDecoration.underline)),
+                )
+              ],
+            ),
+            const SizedBox(height: 30,),
+            DefaultButton(
+                text: 'Continue',
+                press: () {
+                  if (_formKey.currentState!.validate()) {
+                    _formKey.currentState!.save();
+                    Navigator.pushNamed(context, HomeScreen.routeName);
+                  }
+                })
+          ],
+        ),
       ),
     );
   }

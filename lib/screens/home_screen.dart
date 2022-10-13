@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:notes_app/model/note_item.dart';
+import 'package:notes_app/model/note_item_model.dart';
 import 'package:notes_app/repository/read_notes_repository.dart';
 import 'package:notes_app/screens/add_note_screen.dart';
 import 'package:notes_app/widgets/app_icon_button.dart';
