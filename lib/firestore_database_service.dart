@@ -16,7 +16,7 @@ class FirestoreDatabaseService {
     return fireStoreInstance.collection(collectionPath).doc(referenceId).update(data);
   }
 
-  Future deleteCollection(String collectionPath, String referenceId) {
-    return fireStoreInstance.collection(collectionPath).doc(referenceId).delete();
+  void deleteCollection(String collectionPath, String referenceId) {
+    fireStoreInstance.collection(collectionPath).doc(referenceId).delete();
   }
 }

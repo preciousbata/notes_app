@@ -5,23 +5,28 @@ import 'package:notes_app/model/note_item_model.dart';
 const _notes = 'notes';
 
 class NoteRepository {
-  final FirestoreDatabaseService _fireStoreDatabaseService = FirestoreDatabaseService();
+  final FirestoreDatabaseService _fireStoreDb = FirestoreDatabaseService();
 
   Stream<List<NoteItem>> get notes =>
-      _fireStoreDatabaseService.getCollections(_notes).map((event) => event.docs.map((e) => NoteItem.fromJson(e.data())).toList());
+      _fireStoreDb.getCollections(_notes).map((event) => event.docs.map((e) => NoteItem.fromJson(e.data())).toList());
 
   Future<void> deleteNote(String referenceId) async {
-    debugPrint('referenceId is $referenceId');
-    return await _fireStoreDatabaseService.deleteCollection(_notes, referenceId);
+    try {
+      debugPrint('referenceId is $referenceId');
+      _fireStoreDb.deleteCollection(_notes, referenceId);
+    } catch (exception) {
+      debugPrint('exception caught is ${exception.toString()}');
+    }
   }
 
   void createNote(String noteTitle, String noteContent) async {
     try {
-      final note = NoteItem(id: DateTime.now().millisecondsSinceEpoch.toString(), title: noteTitle, content: noteContent, createdAt: DateTime.now());
-      final reference = await _fireStoreDatabaseService.saveToCollection(_notes, note.toJson());
+      final currentDate = DateTime.now();
+      final note = NoteItem(id: currentDate.millisecondsSinceEpoch.toString(), title: noteTitle, content: noteContent, createdAt: currentDate);
+      final reference = await _fireStoreDb.saveToCollection(_notes, note.toJson());
       note.referenceId = reference.id;
       debugPrint('document reference is ${reference.id}');
-      await _fireStoreDatabaseService.updateCollection(_notes, reference.id, note.toJson());
+      await _fireStoreDb.updateCollection(_notes, reference.id, note.toJson());
     } catch (exception) {
       debugPrint('exception caught is ${exception.toString()}');
     }

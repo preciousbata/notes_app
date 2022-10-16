@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:notes_app/firestore_database_service.dart';
 import 'package:notes_app/repository/note_repository.dart';
 
@@ -9,21 +10,26 @@ const _collectionPath = 'archived';
 
 class ArchiveNoteRepository {
   final _noteRepository = NoteRepository();
-  final _fireStoreDatabaseService = FirestoreDatabaseService();
+  final _fireStoreDb = FirestoreDatabaseService();
 
   Stream<List<NoteItem>> get archiveNotes {
-    return _fireStoreDatabaseService.getCollections(_collectionPath).map((event) => event.docs.map((e) => NoteItem.fromJson(e.data())).toList());
+    return _fireStoreDb.getCollections(_collectionPath).map((event) => event.docs.map((e) => NoteItem.fromJson(e.data())).toList());
   }
 
   // you should separate this into two functions
   // one to add an archived note and one to get it and possibly to delete
 
   void saveNoteToArchive(NoteItem noteItem) async {
-    _fireStoreDatabaseService.saveToCollection(_collectionPath, noteItem.toJson());
+    _fireStoreDb.saveToCollection(_collectionPath, noteItem.toJson());
     await _noteRepository.deleteNote(noteItem.referenceId);
   }
 
-  void deleteNoteFromArchive(NoteItem noteItem) async {
-    await _fireStoreDatabaseService.deleteCollection(_collectionPath, noteItem.referenceId);
+  void deleteNoteFromArchive(NoteItem note) async {
+    try {
+      debugPrint('referenceId is ${note.referenceId}');
+      _fireStoreDb.deleteCollection(_collectionPath, note.referenceId);
+    } catch (exception) {
+      debugPrint('exception caught is ${exception.toString()}');
+    }
   }
 }
