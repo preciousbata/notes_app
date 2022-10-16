@@ -1,42 +1,41 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-NoteItem notesFromJson(String str) =>
-    NoteItem.fromJson(json.decode(str));
-
-String notesToJson(NoteItem data) =>
-    json.encode(data.toJson());
-
 class NoteItem {
-  String id;
-  String title;
-  String content;
-  DateTime createdAt;
-  String color;
+  final String id;
+  final String title;
+  final String content;
+  final DateTime createdAt;
+  final String colorHex;
+  String referenceId;
 
   NoteItem({
-    this.id = '',
+    required this.id,
     required this.title,
     required this.content,
     required this.createdAt,
-    this.color = '',
+    this.referenceId = '',
+    this.colorHex = '',
   });
 
-  factory NoteItem.fromJson(Map<String, dynamic> json) =>
-      NoteItem(
-          id: json["id"],
-          title: json["title"],
-          content: json["content"],
-          createdAt:
-              (json["createdAt"] as Timestamp).toDate(),
-          color: json["color"]);
+  factory NoteItem.fromJson(Map<String, dynamic> json) => NoteItem(
+      id: json["id"],
+      title: json["title"],
+      content: json["content"],
+      createdAt: (json["createdAt"] as Timestamp).toDate(),
+      colorHex: json["color"],
+      referenceId: json['referenceId']);
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "title": title,
         "content": content,
         "createdAt": createdAt,
-        "color": color
+        "color": colorHex,
+        "referenceId": referenceId,
       };
+
+  @override
+  String toString() {
+    return 'NoteItem{id: $id, title: $title, content: $content, createdAt: $createdAt, colorHex: $colorHex}';
+  }
 }

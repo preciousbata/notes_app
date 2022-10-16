@@ -1,18 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:notes_app/model/note_item_model.dart';
 
-class Archive {
-  String id;
-  String content;
-
-
-  Archive({
-    this.id = '',
-    required this.content,
-  });
-
-
-  Map<String, dynamic> toJson(DocumentReference<Map<String, dynamic>> note) => {
-    "id": id,
-    "content": content,
-  };
+class ArchiveNote extends NoteItem {
+  ArchiveNote({required String id, required String title, required String content, required DateTime createdAt})
+      : super(id: id, title: title, content: content, createdAt: createdAt);
 }

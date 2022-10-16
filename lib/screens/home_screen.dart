@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:notes_app/model/note_item_model.dart';
-import 'package:notes_app/repository/read_notes_repository.dart';
+import 'package:notes_app/repository/archive_note_repository.dart';
+import 'package:notes_app/repository/note_repository.dart';
 import 'package:notes_app/screens/add_note_screen.dart';
 import 'package:notes_app/widgets/app_icon_button.dart';
 
@@ -17,40 +18,55 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final readNotes = ReadNote().readNotes();
+  final noteRepository = NoteRepository();
+  final archiveNoteRepository = ArchiveNoteRepository();
+
+  @override
+  void initState() {
+    super.initState();
+    archiveNoteRepository.archiveNotes.listen((archiveNotes) {
+      //debugPrint('archiveNotes are $archiveNotes');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder<List<NoteItem>>(
-            stream: readNotes,
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return const Text('Something went wrong!');
-              } else if (snapshot.hasData) {
-                final notes = snapshot.data!;
-                notes.sort((a,b) => b.createdAt.compareTo(a.createdAt));
-                return CustomScrollView(
-                  slivers: [
-                    const AppSliverAppBar(
-                      titleText: 'Note App',
-                      icon: Icons.edit,
-                    ),
-                    SliverPadding(
-                      padding: const EdgeInsets.all(10.0),
-                      sliver: NoteList(
-                        notes: notes,
-                      ),
-                    ),
-                  ],
-                );
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            },
-          ),
+        initialData: List.empty(),
+        stream: noteRepository.notes,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return const Text('Something went wrong!');
+          } else if (snapshot.hasData) {
+            final notes = snapshot.data!;
+            notes.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+            return CustomScrollView(
+              slivers: [
+                const AppSliverAppBar(
+                  titleText: 'Note App',
+                  icon: Icons.edit,
+                ),
+                SliverPadding(
+                  padding: const EdgeInsets.all(10.0),
+                  sliver: NoteList(
+                    notes: notes,
+                    onDeleteNote: (note) => noteRepository.deleteNote(note.referenceId),
+                    onArchiveNote: (note) => {
+                      debugPrint('note to archive is $note'),
+                      archiveNoteRepository.saveNoteToArchive(note)
+                    },
+                  ),
+                ),
+              ],
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.pushNamed(context, AddNoteScreen.routeName),

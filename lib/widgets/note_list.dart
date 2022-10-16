@@ -1,29 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:notes_app/model/archive_model.dart';
 import 'package:notes_app/model/note_item_model.dart';
-import 'package:notes_app/repository/archive_note_repository.dart';
 
-import '../repository/delete_notes_repository.dart';
 import '../utils/dialog.dart';
 
 class NoteList extends StatelessWidget {
   final List<NoteItem> notes;
+  final Function(NoteItem) onDeleteNote;
+  final Function(NoteItem) onArchiveNote;
 
   const NoteList({
     Key? key,
     required this.notes,
+    required this.onArchiveNote,
+    required this.onDeleteNote,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SliverList(
-      delegate: SliverChildBuilderDelegate((context, index) {
-        final note = notes[index];
-        return NoteListItem(
-          note: note,
-          onPressed: (note) {},
-        );
-      }, childCount: notes.length),
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          final note = notes[index];
+          return NoteListItem(
+            onArchiveNote: onArchiveNote,
+            onDeleteNote: onDeleteNote,
+            note: note,
+            onPressed: (note) {},
+          );
+        },
+        childCount: notes.length,
+      ),
     );
   }
 }
@@ -31,11 +37,15 @@ class NoteList extends StatelessWidget {
 class NoteListItem extends StatefulWidget {
   final NoteItem note;
   final void Function(NoteItem) onPressed;
+  final Function(NoteItem) onDeleteNote;
+  final Function(NoteItem) onArchiveNote;
 
   const NoteListItem({
     Key? key,
     required this.note,
     required this.onPressed,
+    required this.onDeleteNote,
+    required this.onArchiveNote,
   }) : super(key: key);
 
   @override
@@ -44,6 +54,7 @@ class NoteListItem extends StatefulWidget {
 
 class _NoteListItemState extends State<NoteListItem> {
   late String whatHappened;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -58,7 +69,7 @@ class _NoteListItemState extends State<NoteListItem> {
             color: Colors.red,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
-              children:  [
+              children: [
                 SizedBox(
                   width: 100.0,
                   height: double.infinity,
@@ -70,11 +81,10 @@ class _NoteListItemState extends State<NoteListItem> {
                         color: Colors.white,
                         size: 25.0,
                       ),
-                      Text('Delete', style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold
-                      ),),
+                      Text(
+                        'Delete',
+                        style: TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
                     ],
                   ),
                 )
@@ -85,7 +95,7 @@ class _NoteListItemState extends State<NoteListItem> {
             color: Colors.green,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
-              children:  [
+              children: [
                 SizedBox(
                   width: 100.0,
                   height: double.infinity,
@@ -97,11 +107,14 @@ class _NoteListItemState extends State<NoteListItem> {
                         color: Colors.white,
                         size: 25.0,
                       ),
-                      Text('Archive', style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),),
+                      Text(
+                        'Archive',
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ],
                   ),
                 )
@@ -110,12 +123,12 @@ class _NoteListItemState extends State<NoteListItem> {
           ),
 
           onDismissed: (direction) {
-            switch(direction){
+            switch (direction) {
               case DismissDirection.endToStart:
-                DeleteNoteRepository.deleteNotes(widget.note.id);
+                widget.onDeleteNote(widget.note);
                 break;
               case DismissDirection.startToEnd:
-                ArchiveNote.archiveNotes(widget.note.id, Archive(content: ));
+                widget.onArchiveNote(widget.note);
                 break;
               default:
                 break;
@@ -125,13 +138,12 @@ class _NoteListItemState extends State<NoteListItem> {
             switch (dismissDirection) {
               case DismissDirection.endToStart:
                 whatHappened = 'DELETED';
-                return await showConfirmationDialog(context, 'delete') ==
-                    true;
+                return await showConfirmationDialog(context, 'delete') == true;
               case DismissDirection.startToEnd:
                 whatHappened = 'ARCHIVED';
                 return await showConfirmationDialog(context, 'archive') == true;
               default:
-              assert(false);
+                assert(false);
                 break;
             }
             return false;

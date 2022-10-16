@@ -1,31 +1,29 @@
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:notes_app/model/archive_model.dart';
-import 'package:notes_app/repository/delete_notes_repository.dart';
+import 'package:notes_app/firestore_database_service.dart';
+import 'package:notes_app/repository/note_repository.dart';
 
 import '../model/note_item_model.dart';
 
-class ArchiveNote {
-  // static Future archiveNotess(String id, Archive archive) async {
-    final note =
-    FirebaseFirestore.instance.collection('user').doc(id);
-  //
-  //   final archiveCollection =
-  //   FirebaseFirestore.instance.collection('archive').doc();
-  //   archive.id = archiveCollection.id;
-  //   final json = archive.toJson(note);
-  //   await archiveCollection.set(json);
-  //   await DeleteNoteRepository.deleteNotes(id);
-  // }
-  List archivedNotes = [];
-  Stream<List<NoteItem>>? archiveNotes() {
-    var noteList = FirebaseFirestore.instance
-        .collection('user')
-        .snapshots()
-        .map((snapshot) => snapshot.docs
-        .map((doc) => NoteItem.fromJson(doc.data()))
-        .toList());
-    return null;
+// this should be marked as a repository
+
+const _collectionPath = 'archived';
+
+class ArchiveNoteRepository {
+  final _noteRepository = NoteRepository();
+  final _fireStoreDatabaseService = FirestoreDatabaseService();
+
+  Stream<List<NoteItem>> get archiveNotes {
+    return _fireStoreDatabaseService.getCollections(_collectionPath).map((event) => event.docs.map((e) => NoteItem.fromJson(e.data())).toList());
   }
 
+  // you should separate this into two functions
+  // one to add an archived note and one to get it and possibly to delete
+
+  void saveNoteToArchive(NoteItem noteItem) async {
+    _fireStoreDatabaseService.saveToCollection(_collectionPath, noteItem.toJson());
+    await _noteRepository.deleteNote(noteItem.referenceId);
+  }
+
+  void deleteNoteFromArchive(NoteItem noteItem) async {
+    await _fireStoreDatabaseService.deleteCollection(_collectionPath, noteItem.referenceId);
+  }
 }

@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:notes_app/constant.dart';
 import 'package:notes_app/routes.dart';
+import 'package:notes_app/screens/home_screen.dart';
 
 import 'screens/splash_screen.dart';
 
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
         ),
         scaffoldBackgroundColor: Colors.white
       ),
-      initialRoute: SplashScreen.routeName,
+      initialRoute: HomeScreen.routeName,
       routes: routes,
     );
   }
