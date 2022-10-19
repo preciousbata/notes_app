@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notes_app/model/note_item_model.dart';
+import 'package:notes_app/screens/add_note_screen.dart';
 
 import '../utils/dialog.dart';
 
@@ -60,7 +61,7 @@ class _NoteListItemState extends State<NoteListItem> {
     return GestureDetector(
       onTap: () => widget.onPressed(widget.note),
       child: Card(
-        color: Colors.blue,
+       color: Colors.blue,
         elevation: 3,
         child: Dismissible(
           key: ValueKey(widget.note.id),
@@ -150,7 +151,7 @@ class _NoteListItemState extends State<NoteListItem> {
           },
           child: Container(
             height: 100.0,
-            color: Colors.blueGrey,
+            color: widget.note.colorHex.isEmpty ? Colors.blueGrey : HexColor(widget.note.colorHex),
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10.0),
             child: Column(
               children: [
@@ -164,13 +165,16 @@ class _NoteListItemState extends State<NoteListItem> {
                           overflow: TextOverflow.fade,
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
+                          color: Colors.white
                         ),
                       ),
-                      Text(
-                        widget.note.content,
-                        maxLines: 5,
-                        softWrap: true,
-                        style: const TextStyle(overflow: TextOverflow.ellipsis),
+                      Flexible(
+                        child: Text(
+                          widget.note.content,
+                          maxLines: 2,
+                          softWrap: true,
+                          style: const TextStyle(overflow: TextOverflow.ellipsis),
+                        ),
                       ),
                     ],
                   ),

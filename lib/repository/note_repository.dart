@@ -7,8 +7,7 @@ const _notes = 'notes';
 class NoteRepository {
   final FirestoreDatabaseService _fireStoreDb = FirestoreDatabaseService();
 
-  Stream<List<NoteItem>> get notes =>
-      _fireStoreDb.getCollections(_notes).map((event) => event.docs.map((e) => NoteItem.fromJson(e.data())).toList());
+  Stream<List<NoteItem>> get notes => _fireStoreDb.getCollections(_notes).map((event) => event.docs.map((e) => NoteItem.fromJson(e.data())).toList());
 
   Future<void> deleteNote(String referenceId) async {
     try {
@@ -19,10 +18,11 @@ class NoteRepository {
     }
   }
 
-  void createNote(String noteTitle, String noteContent) async {
+  void createNote(String noteTitle, String noteContent, String colorHex) async {
     try {
       final currentDate = DateTime.now();
-      final note = NoteItem(id: currentDate.millisecondsSinceEpoch.toString(), title: noteTitle, content: noteContent, createdAt: currentDate);
+      final note =
+          NoteItem(id: currentDate.millisecondsSinceEpoch.toString(), title: noteTitle, content: noteContent, createdAt: currentDate, colorHex: colorHex);
       final reference = await _fireStoreDb.saveToCollection(_notes, note.toJson());
       note.referenceId = reference.id;
       debugPrint('document reference is ${reference.id}');

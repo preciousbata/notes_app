@@ -23,7 +23,7 @@ class NoteItem {
       content: json["content"],
       createdAt: (json["createdAt"] as Timestamp).toDate(),
       colorHex: json["color"],
-      referenceId: json['referenceId']);
+      referenceId: json['referenceId'] ?? '');
 
   Map<String, dynamic> toJson() => {
         "id": id,
