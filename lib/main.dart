@@ -5,8 +5,6 @@ import 'package:notes_app/constant.dart';
 import 'package:notes_app/routes.dart';
 import 'package:notes_app/screens/home_screen.dart';
 
-import 'screens/splash_screen.dart';
-
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -23,20 +21,18 @@ class MyApp extends StatelessWidget {
       title: 'Note App',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.deepOrange,
-        appBarTheme: const AppBarTheme(
-          color: Colors.white,
-          elevation: 0,
-          titleTextStyle: TextStyle(
-            color: primaryColor,
-            fontSize: 32,
-            fontWeight: FontWeight.bold
+          primarySwatch: Colors.deepOrange,
+          appBarTheme: const AppBarTheme(
+            color: Colors.white,
+            elevation: 0,
+            titleTextStyle: TextStyle(
+                color: primaryColor,
+                fontSize: 32,
+                fontWeight: FontWeight.bold),
+            systemOverlayStyle: SystemUiOverlayStyle.light,
+            iconTheme: IconThemeData(color: Colors.black),
           ),
-          systemOverlayStyle: SystemUiOverlayStyle.light,
-          iconTheme: IconThemeData(color: Colors.black),
-        ),
-        scaffoldBackgroundColor: Colors.white
-      ),
+          scaffoldBackgroundColor: Colors.white),
       initialRoute: HomeScreen.routeName,
       routes: routes,
     );

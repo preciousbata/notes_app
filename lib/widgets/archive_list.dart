@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:notes_app/model/note_item_model.dart';
 
+import '../model/note_item_model.dart';
 import '../utils/dialog.dart';
 import '../utils/hex_conversion.dart';
 
-class NoteList extends StatelessWidget {
+class ArchivedList extends StatelessWidget {
   final List<NoteItem> notes;
   final Function(NoteItem) onDeleteNote;
-  final Function(NoteItem) onArchiveNote;
+  final Function(NoteItem) onRestoreNote;
 
-  const NoteList({
+  const ArchivedList({
     Key? key,
     required this.notes,
-    required this.onArchiveNote,
+    required this.onRestoreNote,
     required this.onDeleteNote,
   }) : super(key: key);
 
@@ -22,8 +22,8 @@ class NoteList extends StatelessWidget {
       delegate: SliverChildBuilderDelegate(
         (context, index) {
           final note = notes[index];
-          return NoteListItem(
-            onArchiveNote: onArchiveNote,
+          return ArchivedListItem(
+            onRestoreNote: onRestoreNote,
             onDeleteNote: onDeleteNote,
             note: note,
             onPressed: (note) {},
@@ -35,25 +35,27 @@ class NoteList extends StatelessWidget {
   }
 }
 
-class NoteListItem extends StatefulWidget {
+class ArchivedListItem extends StatefulWidget {
   final NoteItem note;
   final void Function(NoteItem) onPressed;
   final Function(NoteItem) onDeleteNote;
-  final Function(NoteItem) onArchiveNote;
+  final Function(NoteItem) onRestoreNote;
 
-  const NoteListItem({
+  const ArchivedListItem({
     Key? key,
     required this.note,
     required this.onPressed,
     required this.onDeleteNote,
-    required this.onArchiveNote,
+    required this.onRestoreNote,
   }) : super(key: key);
 
   @override
-  State<NoteListItem> createState() => _NoteListItemState();
+  State<ArchivedListItem> createState() =>
+      _ArchivedListItemState();
 }
 
-class _NoteListItemState extends State<NoteListItem> {
+class _ArchivedListItemState
+    extends State<ArchivedListItem> {
   late String whatHappened;
 
   @override
@@ -65,7 +67,6 @@ class _NoteListItemState extends State<NoteListItem> {
         elevation: 3,
         child: Dismissible(
           key: ValueKey(widget.note.id),
-          // direction: DismissDirection.endToStart,
           secondaryBackground: Container(
             color: Colors.red,
             child: Row(
@@ -75,7 +76,8 @@ class _NoteListItemState extends State<NoteListItem> {
                   width: 100.0,
                   height: double.infinity,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment:
+                        MainAxisAlignment.center,
                     children: const [
                       Icon(
                         Icons.delete,
@@ -104,15 +106,16 @@ class _NoteListItemState extends State<NoteListItem> {
                   width: 100.0,
                   height: double.infinity,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment:
+                        MainAxisAlignment.center,
                     children: const [
                       Icon(
-                        Icons.archive_rounded,
+                        Icons.restore_from_trash_rounded,
                         color: Colors.white,
                         size: 25.0,
                       ),
                       Text(
-                        'Archive',
+                        'Restore',
                         style: TextStyle(
                           fontSize: 15,
                           color: Colors.white,
@@ -125,27 +128,31 @@ class _NoteListItemState extends State<NoteListItem> {
               ],
             ),
           ),
-
           onDismissed: (direction) {
             switch (direction) {
               case DismissDirection.endToStart:
                 widget.onDeleteNote(widget.note);
                 break;
               case DismissDirection.startToEnd:
-                widget.onArchiveNote(widget.note);
+                widget.onRestoreNote(widget.note);
                 break;
               default:
                 break;
             }
           },
-          confirmDismiss: (DismissDirection dismissDirection) async {
+          confirmDismiss:
+              (DismissDirection dismissDirection) async {
             switch (dismissDirection) {
               case DismissDirection.endToStart:
                 whatHappened = 'DELETED';
-                return await showConfirmationDialog(context, 'delete') == true;
+                return await showConfirmationDialog(
+                        context, 'delete') ==
+                    true;
               case DismissDirection.startToEnd:
-                whatHappened = 'ARCHIVED';
-                return await showConfirmationDialog(context, 'archive') == true;
+                whatHappened = 'RESTORED';
+                return await showConfirmationDialog(
+                        context, 'restore') ==
+                    true;
               default:
                 assert(false);
                 break;
@@ -157,7 +164,8 @@ class _NoteListItemState extends State<NoteListItem> {
             color: widget.note.colorHex.isEmpty
                 ? Colors.blueGrey
                 : HexColor(widget.note.colorHex),
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10.0),
+            padding: const EdgeInsets.symmetric(
+                horizontal: 20, vertical: 10.0),
             child: Column(
               children: [
                 Expanded(
@@ -178,7 +186,8 @@ class _NoteListItemState extends State<NoteListItem> {
                           maxLines: 2,
                           softWrap: true,
                           style: const TextStyle(
-                              overflow: TextOverflow.ellipsis,
+                              overflow:
+                                  TextOverflow.ellipsis,
                               color: Colors.white),
                         ),
                       ),
@@ -188,7 +197,8 @@ class _NoteListItemState extends State<NoteListItem> {
                 SizedBox(
                   height: 20.0,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment:
+                        MainAxisAlignment.center,
                     children: [
                       const Icon(
                         Icons.calendar_month,

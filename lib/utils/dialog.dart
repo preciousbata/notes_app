@@ -7,7 +7,7 @@ Future<bool?> showConfirmationDialog(BuildContext context, String action) {
     builder: (BuildContext context) {
       return AlertDialog(
         title: Text('Do you want to $action this note?'),
-        actions: <Widget>[
+        actions: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [

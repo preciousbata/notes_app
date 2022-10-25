@@ -1,30 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:notes_app/constant.dart';
 
-Future colorPickerDialog (BuildContext context) {
-  return showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
-        ),
-        content: SingleChildScrollView(
-          child: BlockPicker(pickerColor: primaryColor,
-            onColorChanged: (Color value) {
-            
-            },
+class HexColor extends Color {
+  static int _getColorFromHex(String hexColor) {
+    hexColor = hexColor.toUpperCase().replaceAll("#", "");
+    if (hexColor.length == 6) {
+      hexColor = "FF" + hexColor;
+    }
+    return int.parse(hexColor, radix: 16);
+  }
 
-          ),
-        ),
-        actions: [
-          TextButton(
-            child: const Text('Cancel'),
-            onPressed: () {
-              Navigator.pop(context, false); // showDialog() returns false
-            },
-          ),
-        ],
-      ),
-  );
+  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
 }
