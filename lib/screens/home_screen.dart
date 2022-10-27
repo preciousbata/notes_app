@@ -26,7 +26,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: Colors.white24,
       body: StreamBuilder<List<NoteItem>>(
-        initialData: List.empty(),
         stream: noteRepository.notes,
         builder: (context, snapshot) {
           if (snapshot.hasError) {

@@ -24,8 +24,9 @@ class ArchiveNoteRepository {
   // one to add an archived note and one to get it and possibly to delete
 
   void saveNoteToArchive(NoteItem noteItem) async {
-    _fireStoreDb.saveToCollection(
+    final reference = await _fireStoreDb.saveToCollection(
         _collectionPath, noteItem.toJson());
+    reference.update({"referenceId":reference.id});
     await _noteRepository.deleteNote(noteItem.referenceId);
   }
 
@@ -41,8 +42,10 @@ class ArchiveNoteRepository {
   }
 
   void restoreNote(NoteItem noteItem) async {
-    _fireStoreDb.saveToCollection(
+    final reference = await _fireStoreDb.saveToCollection(
         _notePath, noteItem.toJson());
-    deleteNoteFromArchive(noteItem);
+    reference.update({"referenceId":reference.id});
+    _fireStoreDb.deleteCollection(
+        _collectionPath, noteItem.referenceId);
   }
 }

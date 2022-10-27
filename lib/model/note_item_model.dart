@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class NoteItem {
-  final String id;
+  late final String id;
   final String title;
   final String content;
   final DateTime createdAt;

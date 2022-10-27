@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:notes_app/constant.dart';
 import 'package:notes_app/repository/note_repository.dart';
+import 'package:notes_app/screens/sign_in_screen.dart';
 
 import '../utils/hex_conversion.dart';
 
 class AddNoteScreen extends StatefulWidget {
   static String routeName = '/add_note';
 
-  const AddNoteScreen({Key? key}) : super(key: key);
+  const AddNoteScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<AddNoteScreen> createState() =>
@@ -17,10 +21,9 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   final titleController = TextEditingController();
   final contentController = TextEditingController();
   final noteRepository = NoteRepository();
+  final _formKey = GlobalKey<FormState>();
 
   String _selectedColor = '';
-  String text = '';
-  bool onPressed = false;
 
   final colors = [
     '000000',
@@ -30,19 +33,8 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
     '454B1B',
   ];
 
-  String? get errorText {
-    final text = titleController.value.text;
-    if (text.isEmpty) {
-      return 'Can\'t be empty';
-    }
-    return null;
-  }
-
   void _createNote(String title, String content) {
-    setState(() {
-      onPressed = true;
-    });
-    if (errorText == null) {
+    if (_formKey.currentState!.validate()) {
       noteRepository.createNote(
           title, content, _selectedColor);
       final snackBar = SnackBar(
@@ -76,11 +68,10 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueGrey,
+      // backgroundColor: Colors.blueGrey,
       body: SafeArea(
         child: Padding(
-          padding:
-              const EdgeInsets.fromLTRB(25, 100, 25, 0),
+          padding: const EdgeInsets.fromLTRB(25, 80, 25, 0),
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -89,28 +80,57 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                   style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white),
+                      color: primaryColor),
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                customTextField(
-                    hintTitle: 'Title',
-                    controller: titleController,
-                    maxLine: 1,
-                    errortext: errorText,
-                    value: TextInputType.text,
-                    onchanged: (_) => setState(() {})),
                 const SizedBox(
                   height: 30,
                 ),
-                customTextField(
-                    hintTitle: 'Content',
-                    controller: contentController,
-                    maxLine: 6,
-                    errortext: null,
-                    onchanged: (_) => null,
-                    value: TextInputType.multiline),
+                Form(
+                  key: _formKey,
+                  autovalidateMode:
+                      AutovalidateMode.onUserInteraction,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        keyboardType: TextInputType.text,
+                        controller: titleController,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'title cannot be empty';
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                            labelText: 'Title',
+                            filled: true,
+                            fillColor: Colors.white,
+                            enabledBorder:
+                                OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius
+                                            .circular(10))),
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      TextFormField(
+                        keyboardType:
+                            TextInputType.multiline,
+                        controller: contentController,
+                        maxLines: 6,
+                        decoration: InputDecoration(
+                            labelText: 'Content',
+                            fillColor: Colors.white,
+                            filled: true,
+                            enabledBorder:
+                                OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius
+                                            .circular(10))),
+                      )
+                    ],
+                  ),
+                ),
                 const SizedBox(
                   height: 30,
                 ),
@@ -121,7 +141,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                     const Text(
                       'Pick a Note Colour',
                       style: TextStyle(
-                          color: Colors.white,
+                          color: primaryColor,
                           fontSize: 18),
                     ),
                     SizedBox(
@@ -151,13 +171,11 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    final String title =
-                        titleController.text.trim();
-                    final String content =
-                        contentController.text.trim();
-                    title.isNotEmpty
-                        ? _createNote(title, content)
-                        : null;
+                    final title =
+                        titleController.value.text.trim();
+                    final content =
+                        contentController.value.text.trim();
+                    _createNote(title, content);
                   },
                   child: const Text('Create New Note'),
                 ),
@@ -166,30 +184,6 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget customTextField(
-      {required String hintTitle,
-      required TextEditingController controller,
-      required TextInputType value,
-      required onchanged,
-      required String? errortext,
-      required int maxLine}) {
-    return TextField(
-      controller: controller,
-      maxLines: maxLine,
-      keyboardType: value,
-      onChanged: (_) => onchanged,
-      decoration: InputDecoration(
-          filled: true,
-          enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12)),
-          fillColor: Colors.white,
-          hintText: hintTitle,
-          errorText: onPressed ? errortext : null,
-          contentPadding: const EdgeInsets.symmetric(
-              vertical: 7, horizontal: 10)),
     );
   }
 }

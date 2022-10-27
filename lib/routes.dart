@@ -12,12 +12,14 @@ import 'screens/splash_screen.dart';
 final noteRepository = NoteRepository();
 final archiveNoteRepository = ArchiveNoteRepository();
 
-
 final Map<String, WidgetBuilder> routes = {
-HomeScreen.routeName : (context) => const HomeScreen(),
-  AddNoteScreen.routeName : (context) => const AddNoteScreen(),
-  SplashScreen.routeName : (context) => const SplashScreen(),
+  HomeScreen.routeName: (context) => const HomeScreen(),
+  AddNoteScreen.routeName: (context) =>
+      const AddNoteScreen(),
+  SplashScreen.routeName: (context) => const SplashScreen(),
   SignIn.routeName: (context) => const SignIn(),
-  ArchivedNotesScreen.routeName: (context) => const ArchivedNotesScreen(),
-  AllNotesScreen.routeName: (context) =>const AllNotesScreen(),
+  ArchivedNotesScreen.routeName: (context) =>
+      const ArchivedNotesScreen(),
+  AllNotesScreen.routeName: (context) =>
+      const AllNotesScreen(),
 };
