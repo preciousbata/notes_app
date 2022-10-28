@@ -4,9 +4,11 @@ import 'package:notes_app/repository/note_repository.dart';
 import 'package:notes_app/screens/add_note_screen.dart';
 import 'package:notes_app/screens/archived_note_screen.dart';
 import 'package:notes_app/screens/home_screen.dart';
+import 'package:notes_app/screens/note_details_screen.dart';
 import 'package:notes_app/screens/sign_in_screen.dart';
 import 'package:notes_app/screens/view_all_notes.dart';
 
+import 'model/note_item_model.dart';
 import 'screens/splash_screen.dart';
 
 final noteRepository = NoteRepository();
@@ -22,4 +24,5 @@ final Map<String, WidgetBuilder> routes = {
       const ArchivedNotesScreen(),
   AllNotesScreen.routeName: (context) =>
       const AllNotesScreen(),
+  NoteDetailScreen.routeName : (context) =>  const NoteDetailScreen(),
 };

@@ -73,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               AppIcon(
                 press: () {},
-                icon: Icons.table_chart_outlined,
+                icon: Icons.brightness_4_outlined,
               ),
               AppIcon(
                 press: () => Navigator.pushNamed(

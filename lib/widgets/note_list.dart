@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:notes_app/model/note_item_model.dart';
+import 'package:notes_app/screens/archived_note_screen.dart';
+import 'package:notes_app/screens/note_details_screen.dart';
 
 import '../utils/dialog.dart';
 import '../utils/hex_conversion.dart';
@@ -59,7 +61,7 @@ class _NoteListItemState extends State<NoteListItem> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => widget.onPressed(widget.note),
+      onTap: () => Navigator.pushNamed(context, NoteDetailScreen.routeName, arguments: widget.note),
       child: Card(
         color: Colors.blue,
         elevation: 3,

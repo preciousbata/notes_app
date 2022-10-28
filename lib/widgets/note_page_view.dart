@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notes_app/screens/note_details_screen.dart';
 import 'package:notes_app/screens/view_all_notes.dart';
 
 import '../model/note_item_model.dart';
@@ -131,7 +132,8 @@ class _NotePageState extends State<NotePage> {
           bottom: isExpanded ? 220 : 200,
           child: GestureDetector(
             onPanUpdate: onPanUpdate,
-            onTap: () {},
+            onTap: () => Navigator.pushNamed(context, NoteDetailScreen.routeName,
+            arguments: widget.note),
             child: Container(
               height: size.height * 0.3,
               width: size.width * 0.7,
