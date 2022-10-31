@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:notes_app/constant.dart';
-import 'package:notes_app/firestore_database_service.dart';
+import 'package:notes_app/injection.dart';
 import 'package:notes_app/repository/note_repository.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 import '../utils/hex_conversion.dart';
@@ -21,7 +20,7 @@ class AddNoteScreen extends StatefulWidget {
 class _AddNoteScreenState extends State<AddNoteScreen> {
   final titleController = TextEditingController();
   final contentController = TextEditingController();
-  final noteRepository = NoteRepository(FirestoreDatabaseService(FirebaseFirestore.instance));
+  final noteRepository = sl.get<NoteRepository>();
   final _formKey = GlobalKey<FormState>();
 
   String _selectedColor = '';

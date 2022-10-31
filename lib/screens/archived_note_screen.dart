@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:notes_app/firestore_database_service.dart';
 import 'package:notes_app/model/note_item_model.dart';
-import 'package:notes_app/repository/note_repository.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
-
+import '../injection.dart';
 import '../repository/archive_note_repository.dart';
 import '../widgets/archive_list.dart';
 import '../widgets/sliver_app_bar.dart';
@@ -19,7 +16,7 @@ class ArchivedNotesScreen extends StatefulWidget {
 }
 
 class _ArchivedNoteState extends State<ArchivedNotesScreen> {
-  final archiveNoteRepository = ArchiveNoteRepository(NoteRepository(FirestoreDatabaseService(FirebaseFirestore.instance)),FirestoreDatabaseService(FirebaseFirestore.instance));
+  final archiveNoteRepository = sl.get<ArchiveNoteRepository>();
 
   @override
   Widget build(BuildContext context) {

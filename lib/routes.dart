@@ -17,6 +17,6 @@ final Map<String, WidgetBuilder> routes = {
   SignIn.routeName: (context) => const SignIn(),
   ArchivedNotesScreen.routeName: (context) => const ArchivedNotesScreen(),
   AllNotesScreen.routeName: (context) => const AllNotesScreen(),
-  NoteDetailScreen.routeName: (context) => const NoteDetailScreen(),
+  NoteDetailScreen.routeName: (context) =>  NoteDetailScreen(noteItem: ModalRoute.of(context)!.settings.arguments as NoteItem),
   EditScreen.routeName: (context) => EditScreen(noteItem: ModalRoute.of(context)!.settings.arguments as NoteItem),
 };

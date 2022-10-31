@@ -4,10 +4,12 @@ import 'package:flutter/services.dart';
 import 'package:notes_app/constant.dart';
 import 'package:notes_app/routes.dart';
 import 'package:notes_app/screens/home_screen.dart';
+import 'package:notes_app/injection.dart' as di;
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  di.init();
   runApp(const MyApp());
 }
 
