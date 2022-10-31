@@ -1,22 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirestoreDatabaseService {
-  final fireStoreInstance = FirebaseFirestore.instance;
+  final FirebaseFirestore firebaseFirestore;
+
+  FirestoreDatabaseService(this.firebaseFirestore);
 
   Future<DocumentReference<Map<String, dynamic>>> saveToCollection(String collectionPath, Map<String, dynamic> data) async {
-    final collection = fireStoreInstance.collection(collectionPath);
+    final collection = firebaseFirestore.collection(collectionPath);
     return collection.add(data);
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getCollections(String collectionPath) {
-    return fireStoreInstance.collection(collectionPath).snapshots();
+    return firebaseFirestore.collection(collectionPath).snapshots();
   }
 
   Future updateCollection({required String collectionPath, required String referenceId, required Map<String, dynamic> data}) {
-    return fireStoreInstance.collection(collectionPath).doc(referenceId).update(data);
+    return firebaseFirestore.collection(collectionPath).doc(referenceId).update(data);
   }
 
   void deleteCollection(String collectionPath, String referenceId) {
-    fireStoreInstance.collection(collectionPath).doc(referenceId).delete();
+    firebaseFirestore.collection(collectionPath).doc(referenceId).delete();
   }
 }

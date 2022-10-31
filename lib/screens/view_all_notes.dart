@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:notes_app/firestore_database_service.dart';
 import 'package:notes_app/repository/note_repository.dart';
 
 import '../model/note_item_model.dart';
 import '../repository/archive_note_repository.dart';
 import '../widgets/note_list.dart';
 import '../widgets/sliver_app_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class AllNotesScreen extends StatefulWidget {
   static String routeName = '/viewAllNotes';
+
   const AllNotesScreen({Key? key}) : super(key: key);
 
   @override
@@ -15,8 +19,10 @@ class AllNotesScreen extends StatefulWidget {
 }
 
 class _AllNotesScreenState extends State<AllNotesScreen> {
-  final noteRepository = NoteRepository();
-  final archiveNoteRepository = ArchiveNoteRepository();
+
+  final noteRepository = NoteRepository(FirestoreDatabaseService(FirebaseFirestore.instance));
+  final archiveNoteRepository = ArchiveNoteRepository(NoteRepository(FirestoreDatabaseService(FirebaseFirestore.instance)), FirestoreDatabaseService(FirebaseFirestore.instance));
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,14 +42,11 @@ class _AllNotesScreenState extends State<AllNotesScreen> {
                 SliverPadding(
                   padding: const EdgeInsets.all(10.0),
                   sliver:
-                  // NoteGrid(notes: notes),
-                  NoteList(
+                      // NoteGrid(notes: notes),
+                      NoteList(
                     notes: notes,
                     onDeleteNote: (note) => noteRepository.deleteNote(note.referenceId),
-                    onArchiveNote: (note) => {
-                      debugPrint('note to archive is $note'),
-                      archiveNoteRepository.saveNoteToArchive(note)
-                    },
+                    onArchiveNote: (note) => {debugPrint('note to archive is $note'), archiveNoteRepository.saveNoteToArchive(note)},
                   ),
                 ),
               ],

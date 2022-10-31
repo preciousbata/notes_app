@@ -17,6 +17,8 @@ class NoteItem {
     this.colorHex = '',
   });
 
+  factory NoteItem.forTest() => NoteItem(id: '0', title: "New note", content: "Hello World", createdAt: DateTime.parse('2020-01-01T00:00:00Z'));
+
   factory NoteItem.fromJson(Map<String, dynamic> json) => NoteItem(
       id: json["id"],
       title: json["title"],

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:notes_app/constant.dart';
 import 'package:notes_app/model/note_item_model.dart';
 
 import 'edit_screen.dart';
@@ -21,16 +20,16 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
     final args = ModalRoute.of(context)!.settings.arguments as NoteItem;
     debugPrint('note item is $args');
     return Scaffold(
-      appBar: AppBar(
-        title: Text(args.title.toUpperCase()),
-        centerTitle: true,
-        actions:  [
-          IconButton(onPressed: () => Navigator.pushNamed(context, EditScreen.routeName, arguments: args), icon: const Icon(Icons.edit))
-        ],
-      ),
-      body: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 12),
-          child: Text(args.content, style: const TextStyle(fontSize: 20),))
-    );
+        appBar: AppBar(
+          title: Text(args.title.toUpperCase()),
+          centerTitle: true,
+          actions: [IconButton(onPressed: () => Navigator.pushNamed(context, EditScreen.routeName, arguments: args), icon: const Icon(Icons.edit))],
+        ),
+        body: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 12),
+            child: Text(
+              args.content,
+              style: const TextStyle(fontSize: 20),
+            )));
   }
 }

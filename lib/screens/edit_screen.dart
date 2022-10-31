@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:notes_app/firestore_database_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 import '../constant.dart';
 import '../model/note_item_model.dart';
@@ -18,14 +21,13 @@ class EditScreen extends StatefulWidget {
 class _EditScreenState extends State<EditScreen> {
   final updateTitleController = TextEditingController();
   final updateContentController = TextEditingController();
-  final noteRepository = NoteRepository();
+  final noteRepository = NoteRepository(FirestoreDatabaseService(FirebaseFirestore.instance));
   final _formKey = GlobalKey<FormState>();
 
   String _selectedColor = '';
   bool updateNoteColor = false;
 
-  void _updateNote(
-      String title, String content, String referenceId, String color) {
+  void _updateNote(String title, String content, String referenceId, String color) {
     if (_formKey.currentState!.validate()) {
       noteRepository.updateNote(title, content, referenceId, color);
       final snackBar = SnackBar(
@@ -49,17 +51,17 @@ class _EditScreenState extends State<EditScreen> {
         color: HexColor(hex),
         shape: BoxShape.circle,
       ),
-      child: _selectedColor == hex
-          ? const Center(child: Icon(Icons.check, color: Colors.amber))
-          : const SizedBox.shrink(),
+      child: _selectedColor == hex ? const Center(child: Icon(Icons.check, color: Colors.amber)) : const SizedBox.shrink(),
     );
   }
-@override
+
+  @override
   void initState() {
-  updateContentController.text = widget.noteItem.content;
-  updateTitleController.text = widget.noteItem.title;
+    updateContentController.text = widget.noteItem.content;
+    updateTitleController.text = widget.noteItem.title;
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,10 +74,7 @@ class _EditScreenState extends State<EditScreen> {
               children: [
                 const Text(
                   'Edit Note',
-                  style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: primaryColor),
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: primaryColor),
                 ),
                 const SizedBox(
                   height: 30,
@@ -114,8 +113,7 @@ class _EditScreenState extends State<EditScreen> {
                             labelText: 'Content',
                             fillColor: Colors.white,
                             filled: true,
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10))),
+                            enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
                       )
                     ],
                   ),
@@ -154,9 +152,7 @@ class _EditScreenState extends State<EditScreen> {
                               child: updateNoteColor
                                   ? buildColorContainer(colors[index])
                                   : colors[index] == widget.noteItem.colorHex
-                                      ? const Center(
-                                          child: Icon(Icons.check,
-                                              color: Colors.amber))
+                                      ? const Center(child: Icon(Icons.check, color: Colors.amber))
                                       : const SizedBox.shrink(),
                             ),
                           );
@@ -170,8 +166,7 @@ class _EditScreenState extends State<EditScreen> {
                     final title = updateTitleController.value.text.trim();
                     final content = updateContentController.value.text.trim();
                     final noteColor = _selectedColor;
-                    _updateNote(
-                        title, content, widget.noteItem.referenceId, noteColor);
+                    _updateNote(title, content, widget.noteItem.referenceId, noteColor);
                   },
                   child: const Text('Update Note'),
                 ),

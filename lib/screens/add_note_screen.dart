@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:notes_app/constant.dart';
+import 'package:notes_app/firestore_database_service.dart';
 import 'package:notes_app/repository/note_repository.dart';
-import 'package:notes_app/screens/sign_in_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 import '../utils/hex_conversion.dart';
 
@@ -13,24 +15,20 @@ class AddNoteScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<AddNoteScreen> createState() =>
-      _AddNoteScreenState();
+  State<AddNoteScreen> createState() => _AddNoteScreenState();
 }
 
 class _AddNoteScreenState extends State<AddNoteScreen> {
   final titleController = TextEditingController();
   final contentController = TextEditingController();
-  final noteRepository = NoteRepository();
+  final noteRepository = NoteRepository(FirestoreDatabaseService(FirebaseFirestore.instance));
   final _formKey = GlobalKey<FormState>();
 
   String _selectedColor = '';
 
-
-
   void _createNote(String title, String content) {
     if (_formKey.currentState!.validate()) {
-      noteRepository.createNote(
-          title, content, _selectedColor);
+      noteRepository.createNote(title, content, _selectedColor);
       final snackBar = SnackBar(
         content: const Text('Note Created Successfully'),
         backgroundColor: (Colors.black12),
@@ -52,10 +50,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
         color: HexColor(hex),
         shape: BoxShape.circle,
       ),
-      child: _selectedColor == hex
-          ? const Center(
-              child: Icon(Icons.check, color: Colors.amber))
-          : const SizedBox.shrink(),
+      child: _selectedColor == hex ? const Center(child: Icon(Icons.check, color: Colors.amber)) : const SizedBox.shrink(),
     );
   }
 
@@ -71,18 +66,14 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
               children: [
                 const Text(
                   'Create New Note',
-                  style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: primaryColor),
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: primaryColor),
                 ),
                 const SizedBox(
                   height: 30,
                 ),
                 Form(
                   key: _formKey,
-                  autovalidateMode:
-                      AutovalidateMode.onUserInteraction,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   child: Column(
                     children: [
                       TextFormField(
@@ -98,29 +89,20 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                             labelText: 'Title',
                             filled: true,
                             fillColor: Colors.white,
-                            enabledBorder:
-                                OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius
-                                            .circular(10))),
+                            enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
                       ),
                       const SizedBox(
                         height: 30,
                       ),
                       TextFormField(
-                        keyboardType:
-                            TextInputType.multiline,
+                        keyboardType: TextInputType.multiline,
                         controller: contentController,
                         maxLines: 6,
                         decoration: InputDecoration(
                             labelText: 'Content',
                             fillColor: Colors.white,
                             filled: true,
-                            enabledBorder:
-                                OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius
-                                            .circular(10))),
+                            enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
                       )
                     ],
                   ),
@@ -129,32 +111,26 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                   height: 30,
                 ),
                 Column(
-                  crossAxisAlignment:
-                      CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
                       'Pick a Note Colour',
-                      style: TextStyle(
-                          color: primaryColor,
-                          fontSize: 18),
+                      style: TextStyle(color: primaryColor, fontSize: 18),
                     ),
                     SizedBox(
                       height: 100,
                       child: ListView.separated(
-                        separatorBuilder: (_, __) =>
-                            const SizedBox(width: 20),
+                        separatorBuilder: (_, __) => const SizedBox(width: 20),
                         scrollDirection: Axis.horizontal,
                         itemCount: colors.length,
                         itemBuilder: (_, int index) {
                           return GestureDetector(
                             onTap: () {
                               setState(() {
-                                _selectedColor =
-                                    colors[index];
+                                _selectedColor = colors[index];
                               });
                             },
-                            child: buildColorContainer(
-                                colors[index]),
+                            child: buildColorContainer(colors[index]),
                           );
                         },
                       ),
@@ -163,10 +139,8 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    final title =
-                        titleController.value.text.trim();
-                    final content =
-                        contentController.value.text.trim();
+                    final title = titleController.value.text.trim();
+                    final content = contentController.value.text.trim();
                     _createNote(title, content);
                   },
                   child: const Text('Create New Note'),

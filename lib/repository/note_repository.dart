@@ -5,7 +5,9 @@ import 'package:notes_app/model/note_item_model.dart';
 const _notes = 'notes';
 
 class NoteRepository {
-  final FirestoreDatabaseService _fireStoreDb = FirestoreDatabaseService();
+  final FirestoreDatabaseService _fireStoreDb;
+
+  NoteRepository(this._fireStoreDb);
 
   Stream<List<NoteItem>> get notes => _fireStoreDb.getCollections(_notes).map((event) => event.docs.map((e) => NoteItem.fromJson(e.data())).toList());
 
@@ -32,14 +34,11 @@ class NoteRepository {
     }
   }
 
-  Future<void> updateNote(String referenceId, String title, String content, String color) async{
+  Future<void> updateNote(String referenceId, String title, String content, String color) async {
     try {
-      await _fireStoreDb.updateCollection(collectionPath:_notes, referenceId:referenceId, data: {
-        "title":title, "content": content, "color":color
-      });
+      await _fireStoreDb.updateCollection(collectionPath: _notes, referenceId: referenceId, data: {"title": title, "content": content, "color": color});
     } catch (exception) {
       debugPrint('exception caught is ${exception.toString()}');
     }
   }
 }
-

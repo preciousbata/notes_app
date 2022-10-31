@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:notes_app/firestore_database_service.dart';
 import 'package:notes_app/model/note_item_model.dart';
 import 'package:notes_app/repository/archive_note_repository.dart';
 import 'package:notes_app/repository/note_repository.dart';
 import 'package:notes_app/screens/add_note_screen.dart';
 import 'package:notes_app/screens/archived_note_screen.dart';
 import 'package:notes_app/widgets/app_icon_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 import '../widgets/note_page_view.dart';
 
@@ -18,8 +21,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final noteRepository = NoteRepository();
-  final archiveNoteRepository = ArchiveNoteRepository();
+  final noteRepository = NoteRepository(FirestoreDatabaseService(FirebaseFirestore.instance));
+  final archiveNoteRepository = ArchiveNoteRepository(
+    NoteRepository(FirestoreDatabaseService(FirebaseFirestore.instance)), FirestoreDatabaseService(FirebaseFirestore.instance)
+  );
 
   @override
   Widget build(BuildContext context) {
