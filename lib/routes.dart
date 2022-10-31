@@ -3,6 +3,7 @@ import 'package:notes_app/repository/archive_note_repository.dart';
 import 'package:notes_app/repository/note_repository.dart';
 import 'package:notes_app/screens/add_note_screen.dart';
 import 'package:notes_app/screens/archived_note_screen.dart';
+import 'package:notes_app/screens/edit_screen.dart';
 import 'package:notes_app/screens/home_screen.dart';
 import 'package:notes_app/screens/note_details_screen.dart';
 import 'package:notes_app/screens/sign_in_screen.dart';
@@ -25,4 +26,5 @@ final Map<String, WidgetBuilder> routes = {
   AllNotesScreen.routeName: (context) =>
       const AllNotesScreen(),
   NoteDetailScreen.routeName : (context) =>  const NoteDetailScreen(),
+  EditScreen.routeName : (context) =>  EditScreen(noteItem: ModalRoute.of(context)!.settings.arguments as NoteItem,),
 };

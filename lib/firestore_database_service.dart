@@ -12,7 +12,7 @@ class FirestoreDatabaseService {
     return fireStoreInstance.collection(collectionPath).snapshots();
   }
 
-  Future updateCollection(String collectionPath, String referenceId, Map<String, dynamic> data) {
+  Future updateCollection({required String collectionPath, required String referenceId, required Map<String, dynamic> data}) {
     return fireStoreInstance.collection(collectionPath).doc(referenceId).update(data);
   }
 

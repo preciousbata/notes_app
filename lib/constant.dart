@@ -13,3 +13,11 @@ const String passwordTooShort = 'invalid password';
 const String passwordMatchError = 'invalid password';
 const String invalidEmail = 'Invalid Email';
 const String titleEmpty = 'Title cannot be empty';
+
+final colors = [
+    '000000',
+    '9F2B68',
+    'BF40BF',
+    '00FF00',
+    '454B1B',
+];
