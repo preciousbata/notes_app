@@ -1,10 +1,20 @@
-# notes_app
+# NOTES APP
 
-A note app.
+A note app with fire store integration as the backend of choice to perform CRUD actions.
 
 ## Getting Started
 
 This project is a starting point for a Flutter application.
+
+
+
+
+
+
+
+
+
+
 
 A few resources to get you started if this is your first Flutter project:
 
